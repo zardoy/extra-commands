@@ -1,0 +1,34 @@
+{
+    "name": "extra-commands",
+    "displayName": "Extra Commands",
+    "publisher": "zardoy",
+    "categories": [
+        "Other"
+    ],
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/zardoy/extra-commands.git",
+    "author": "Vitaly Turovsky <vital2580@icloud.com>",
+    "license": "MIT",
+    "private": true,
+    "contributes": {
+        "commands": [
+            {
+                "command": "say-hello",
+                "title": "Ssay Hellow"
+            }
+        ]
+    },
+    "scripts": {
+        "start": "vscode-framework start --target web"
+    },
+    "devDependencies": {
+        "@types/node": "^16.10.3",
+        "@types/vscode": "^1.61.0",
+        "@zardoy/tsconfig": "^1.2.2",
+        "eslint": "^7",
+        "eslint-plugin-zardoy-config": "^0.1.0",
+        "typescript": "^4.4.3",
+        "vscode-framework": "^0.0.7"
+    }
+}
