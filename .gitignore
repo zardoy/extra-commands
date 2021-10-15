@@ -1,6 +1,7 @@
 # Learn more about paths on https://github.com/github/gitignore/blob/master/Node.gitignore
 
 node_modules
+.vscode-test-web
 
 build
 dist
