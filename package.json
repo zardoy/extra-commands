@@ -35,7 +35,6 @@
     "devDependencies": {
         "@types/node": "^16.10.3",
         "@types/vscode": "^1.61.0",
-        "@vscode/test-web": "^0.0.15",
         "@zardoy/tsconfig": "^1.2.2",
         "eslint": "^7",
         "eslint-plugin-zardoy-config": "^0.1.0",
@@ -43,6 +42,8 @@
         "vscode-framework": "^0.0.7"
     },
     "dependencies": {
-        "cross-env": "^7.0.3"
+        "cross-env": "^7.0.3",
+        "escape-string-regexp": "^5.0.0",
+        "untildify": "^4.0.0"
     }
 }
