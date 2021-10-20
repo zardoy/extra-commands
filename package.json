@@ -19,6 +19,10 @@
             {
                 "command": "open-extension-folder",
                 "title": "Open Extension Folder"
+            },
+            {
+                "command": "show-extensions-sizes",
+                "title": "Show Extensions Sizes"
             }
         ],
         "menus": {
@@ -44,6 +48,7 @@
     "dependencies": {
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
+        "fast-folder-size": "^1.5.0",
         "untildify": "^4.0.0"
     }
 }

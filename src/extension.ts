@@ -1,23 +1,25 @@
 import fs from 'fs'
 import { join } from 'path'
 import vscode from 'vscode'
-import { VSCodeFramework } from 'vscode-framework'
+import { extensionCtx, registerExtensionCommand } from 'vscode-framework'
 import untildify from 'untildify'
+import fastFolderSize from 'fast-folder-size'
 
-export const activate = (ctx: vscode.ExtensionContext) => {
-    const framework = new VSCodeFramework(ctx)
-    framework.registerCommand('open-extension-folder', async (_, extensionId: string) => {
-        const extensionsPath =
-            process.env.NODE_ENV === 'development'
-                ? process.platform === 'win32'
-                    ? '%USERPROFILE%\\.vscode\\extensions'
-                    : '~/.vscode/extensions'
-                : join(ctx.extensionPath, '..')
+// TODO fight for releasing
+const getExtensionsDir = () =>
+    process.env.NODE_ENV === 'development'
+        ? process.platform === 'win32'
+            ? '%USERPROFILE%\\.vscode\\extensions'
+            : '~/.vscode/extensions'
+        : join(extensionCtx.extensionPath, '..')
 
-        const extensionsDirs = await fs.promises.readdir(untildify(extensionsPath))
+export const activate = () => {
+    registerExtensionCommand('open-extension-folder', async (_, extensionId: string) => {
+        const extensionsDirs = await fs.promises.readdir(untildify(getExtensionsDir()))
 
-        // const extensions = extensionsDirs.
-
-        console.log(extensionsPath, extensionsDirs)
+        console.log(extensionsDirs)
+    })
+    registerExtensionCommand('show-extensionos-sizes', async () => {
+        // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))
     })
 }
