@@ -12,12 +12,14 @@ specifiers:
   typescript: ^4.4.3
   untildify: ^4.0.0
   vscode-framework: ^0.0.7
+  vscode-uri: ^3.0.2
 
 dependencies:
   cross-env: 7.0.3
   escape-string-regexp: 5.0.0
   fast-folder-size: 1.5.0
   untildify: 4.0.0
+  vscode-uri: 3.0.2
 
 devDependencies:
   '@types/node': 16.10.3
@@ -2281,6 +2283,10 @@ packages:
       spdx-correct: 3.1.1
       spdx-expression-parse: 3.0.1
     dev: true
+
+  /vscode-uri/3.0.2:
+    resolution: {integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==}
+    dev: false
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}

@@ -23,6 +23,14 @@
             {
                 "command": "show-extensions-sizes",
                 "title": "Show Extensions Sizes"
+            },
+            {
+                "command": "go-to-line",
+                "title": "Go to Line..."
+            },
+            {
+                "command": "go-to-relative-path",
+                "title": "Go to Relative Path..."
             }
         ],
         "menus": {
@@ -49,6 +57,7 @@
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.5.0",
-        "untildify": "^4.0.0"
+        "untildify": "^4.0.0",
+        "vscode-uri": "^3.0.2"
     }
 }
