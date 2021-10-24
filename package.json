@@ -31,6 +31,14 @@
             {
                 "command": "go-to-relative-path",
                 "title": "Go to Relative Path..."
+            },
+            {
+                "command": "add-import",
+                "title": "Add TypeScript Import"
+            },
+            {
+                "command": "open-terminal-without-focus",
+                "title": "Open Terminal without Focus"
             }
         ],
         "menus": {
@@ -54,6 +62,7 @@
         "vscode-framework": "^0.0.7"
     },
     "dependencies": {
+        "ansi-escapes": "^5.0.0",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.5.0",
