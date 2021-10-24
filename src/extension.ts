@@ -115,10 +115,11 @@ export const activate = async () => {
         await editor.insertSnippet(new vscode.SnippetString("import { $2 } from '$1'\n"), new vscode.Position(nextImportLine, 0))
         const { dispose } = vscode.window.onDidChangeTextEditorSelection(({ selections }) => {
             const currentLine = selections[0]!.start.line
+            if (currentLine !== nextImportLine) dispose()
+
             if (currentLine <= nextImportLine) return
             // looses selections and mutl-selections
             editor.selection = new vscode.Selection(currentPos.translate(1), currentPos.translate(1))
-            dispose()
         })
     })
     registerExtensionCommand('open-terminal-without-focus', () => {
