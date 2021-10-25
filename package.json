@@ -13,8 +13,8 @@
     "contributes": {
         "commands": [
             {
-                "command": "open-shortcuts-of-different-platform",
-                "title": "Open Shortcuts of Different Platform"
+                "command": "open-shortcuts-of-another-platform",
+                "title": "Open Shortcuts of Another Platform"
             },
             {
                 "command": "open-extension-folder",

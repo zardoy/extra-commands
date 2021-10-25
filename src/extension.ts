@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { join, posix } from 'path'
+import { posix } from 'path'
 import vscode from 'vscode'
 import { extensionCtx, registerActiveDevelopmentCommand, registerExtensionCommand, registerNoop } from 'vscode-framework'
 import untildify from 'untildify'
@@ -13,9 +13,21 @@ const getExtensionsDir = () =>
         ? process.platform === 'win32'
             ? '%USERPROFILE%\\.vscode\\extensions'
             : '~/.vscode/extensions'
-        : join(extensionCtx.extensionPath, '..')
+        : posix.join(extensionCtx.extensionPath, '..')
 
 export const activate = async () => {
+    vscode.workspace.registerTextDocumentContentProvider('extra-commands', {
+        async provideTextDocumentContent(uri) {
+            // TODO support windows
+            return getPlatformKeybindings('windows')
+        },
+    })
+
+    registerExtensionCommand('open-shortcuts-of-another-platform', async _ => {
+        await vscode.window.showTextDocument(vscode.Uri.parse('extra-commands:windowsKeybindings.jsonc'), {
+            preview: false,
+        })
+    })
     registerExtensionCommand('open-extension-folder', async (_, extensionId: string) => {
         const extensionsDirs = await fs.promises.readdir(untildify(getExtensionsDir()))
 
@@ -68,7 +80,7 @@ export const activate = async () => {
             let currentPath = '..'
             const quickPick = vscode.window.createQuickPick<vscode.QuickPickItem & { type: vscode.FileType; name: string }>()
             const updateItems = async () => {
-                const filesList = await fs.readDirectory(Utils.joinPath(currentUri, currentPath))
+                const filesList = await fs.readDirectory(vscode.Uri.joinPath(currentUri, currentPath))
                 quickPick.items = filesList.map(([name, type]) => ({
                     name,
                     type,
@@ -161,4 +173,14 @@ export const activate = async () => {
         })
         terminal.show()
     })
+}
+
+// TODO support: portable, web?
+const getPlatformKeybindings = async (platform: 'mac' | 'windows' | 'linux'): Promise<string> => {
+    const rawContent = await fs.promises.readFile(
+        posix.join(process.env.HOME!, 'Library/Application Support/Code/User/sync/keybindings/lastSynckeybindings.json'),
+        'utf-8',
+    )
+
+    return JSON.parse(JSON.parse(JSON.parse(rawContent).content).content)[platform]
 }
