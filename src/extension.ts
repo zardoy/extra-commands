@@ -23,20 +23,20 @@ export const activate = async () => {
         },
     })
 
-    registerExtensionCommand('open-shortcuts-of-another-platform', async _ => {
+    registerExtensionCommand('openShortcutsOfAnotherPlatform', async _ => {
         await vscode.window.showTextDocument(vscode.Uri.parse('extra-commands:windowsKeybindings.jsonc'), {
             preview: false,
         })
     })
-    registerExtensionCommand('open-extension-folder', async (_, extensionId: string) => {
+    registerExtensionCommand('openExtensionFolder', async (_, extensionId: string) => {
         const extensionsDirs = await fs.promises.readdir(untildify(getExtensionsDir()))
 
         console.log(extensionsDirs)
     })
-    registerExtensionCommand('show-extensionos-sizes', async () => {
+    registerExtensionCommand('showExtensionosSizes', async () => {
         // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))
     })
-    registerExtensionCommand('go-to-line', async () => {
+    registerExtensionCommand('goToLine', async () => {
         const { activeTextEditor } = vscode.window
         if (!activeTextEditor) return
         const inputBox = vscode.window.createInputBox()
@@ -67,7 +67,7 @@ export const activate = async () => {
         inputBox.onDidHide(inputBox.dispose)
         inputBox.show()
     })
-    registerExtensionCommand('go-to-relative-path', async () => {
+    registerExtensionCommand('goToRelativePath', async () => {
         const currentUri = vscode.window.activeTextEditor?.document.uri
         if (!currentUri) {
             await vscode.window.showWarningMessage('No opened text editor')
@@ -108,7 +108,7 @@ export const activate = async () => {
         if (selectedPath === undefined) return
         await vscode.workspace.openTextDocument(Utils.joinPath(currentUri, selectedPath))
     })
-    registerExtensionCommand('add-import', async () => {
+    registerExtensionCommand('addImport', async () => {
         // for TS files only
         // TODO this command will be removed from here in favor of TS plugin
         const editor = vscode.window.activeTextEditor
@@ -134,7 +134,7 @@ export const activate = async () => {
             editor.selection = new vscode.Selection(currentPos.translate(1), currentPos.translate(1))
         })
     })
-    registerExtensionCommand('open-terminal-without-focus', async () => {
+    registerExtensionCommand('openTerminalWithoutFocus', async () => {
         await vscode.commands.executeCommand('workbench.action.togglePanel')
         setTimeout(() => {
             void vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')

@@ -13,38 +13,38 @@
     "contributes": {
         "commands": [
             {
-                "command": "open-shortcuts-of-another-platform",
+                "command": "openShortcutsOfAnotherPlatform",
                 "title": "Open Shortcuts of Another Platform"
             },
             {
-                "command": "open-extension-folder",
+                "command": "openExtensionFolder",
                 "title": "Open Extension Folder"
             },
             {
-                "command": "show-extensions-sizes",
+                "command": "showExtensionsSizes",
                 "title": "Show Extensions Sizes"
             },
             {
-                "command": "go-to-line",
+                "command": "goToLine",
                 "title": "Go to Line..."
             },
             {
-                "command": "go-to-relative-path",
+                "command": "goToRelativePath",
                 "title": "Go to Relative Path..."
             },
             {
-                "command": "add-import",
+                "command": "addImport",
                 "title": "Add TypeScript Import"
             },
             {
-                "command": "open-terminal-without-focus",
+                "command": "openTerminalWithoutFocus",
                 "title": "Open Terminal without Focus"
             }
         ],
         "menus": {
             "extension/context": [
                 {
-                    "command": "open-extension-folder"
+                    "command": "openExtensionFolder"
                 }
             ]
         }
