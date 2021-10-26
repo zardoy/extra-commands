@@ -134,8 +134,11 @@ export const activate = async () => {
             editor.selection = new vscode.Selection(currentPos.translate(1), currentPos.translate(1))
         })
     })
-    registerExtensionCommand('open-terminal-without-focus', () => {
-        vscode.window.activeTerminal?.show(true)
+    registerExtensionCommand('open-terminal-without-focus', async () => {
+        await vscode.commands.executeCommand('workbench.action.togglePanel')
+        setTimeout(() => {
+            void vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
+        }, 150)
     })
     registerActiveDevelopmentCommand(() => {
         const writeEmitter = new vscode.EventEmitter<string>()
