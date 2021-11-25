@@ -5,7 +5,7 @@
     "categories": [
         "Other"
     ],
-    "version": "0.0.1",
+    "version": "0.0.0-dev",
     "repository": "https://github.com/zardoy/extra-commands.git",
     "author": "Vitaly Turovsky <vital2580@icloud.com>",
     "license": "MIT",
@@ -59,7 +59,7 @@
         "eslint": "^7",
         "eslint-plugin-zardoy-config": "^0.1.0",
         "typescript": "^4.4.3",
-        "vscode-framework": "^0.0.7"
+        "vscode-framework": "^0.0.18"
     },
     "dependencies": {
         "ansi-escapes": "^5.0.0",

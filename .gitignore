@@ -22,3 +22,8 @@ experiment-*
 .env.*.local
 
 .vscode-test
+
+out
+src/generated.ts
+src/configurationTypeCache.jsonc
+    
