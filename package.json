@@ -39,6 +39,10 @@
             {
                 "command": "openTerminalWithoutFocus",
                 "title": "Open Terminal without Focus"
+            },
+            {
+                "command": "renameSymbolAndFile",
+                "title": "Rename Symbol and File"
             }
         ],
         "menus": {
@@ -50,7 +54,7 @@
         }
     },
     "scripts": {
-        "start": "cross-env DEBUG=* vscode-framework start"
+        "start": "vscode-framework start"
     },
     "devDependencies": {
         "@types/node": "^16.10.3",

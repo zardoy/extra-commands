@@ -6,6 +6,7 @@ import untildify from 'untildify'
 import fastFolderSize from 'fast-folder-size'
 import { Utils } from 'vscode-uri'
 import ansiEscapes from 'ansi-escapes'
+import renameSymbolAndFile from './commands/renameSymbolAndFile'
 
 // TODO fight for releasing
 const getExtensionsDir = () =>
@@ -33,9 +34,9 @@ export const activate = async () => {
 
         console.log(extensionsDirs)
     })
-    registerExtensionCommand('showExtensionosSizes', async () => {
-        // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))
-    })
+    // registerExtensionCommand('showExtensionosSizes', async () => {
+    // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))
+    // })
     registerExtensionCommand('goToLine', async () => {
         const { activeTextEditor } = vscode.window
         if (!activeTextEditor) return
@@ -140,7 +141,7 @@ export const activate = async () => {
             void vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
         }, 150)
     })
-    registerActiveDevelopmentCommand(() => {
+    registerNoop('enhenced terminal', () => {
         const writeEmitter = new vscode.EventEmitter<string>()
         let line = ''
         const terminal = vscode.window.createTerminal({
@@ -176,6 +177,8 @@ export const activate = async () => {
         })
         terminal.show()
     })
+
+    registerExtensionCommand('renameSymbolAndFile', renameSymbolAndFile)
 }
 
 // TODO support: portable, web?
