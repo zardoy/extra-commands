@@ -10,6 +10,9 @@
     "author": "Vitaly Turovsky <vital2580@icloud.com>",
     "license": "MIT",
     "private": true,
+    "activationEvents": [
+        "onCommands"
+    ],
     "contributes": {
         "commands": [
             {
