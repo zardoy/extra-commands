@@ -192,6 +192,20 @@ export const activate = async () => {
             }
         })
     })
+
+    registerExtensionCommand('removeSurroundingCharacter', async () => {
+        // TODO create something like also for withing selection (this works with outer sel)
+        const editor = vscode.window.activeTextEditor
+        if (!editor || editor.viewColumn === undefined) return
+        await editor.edit(edit => {
+            for (const selection of editor.selections)
+                for (const [pos, delta] of [
+                    [selection.start, -1],
+                    [selection.end, 1],
+                ] as Array<[vscode.Position, number]>)
+                    edit.delete(new vscode.Range(pos.translate(0, delta), pos))
+        })
+    })
 }
 
 // TODO support: portable, web?

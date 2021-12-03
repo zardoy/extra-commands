@@ -50,6 +50,10 @@
             {
                 "command": "fixedCmdBackspace",
                 "title": "fixedCmdBackspace"
+            },
+            {
+                "command": "removeSurroundingCharacter",
+                "title": "Remove Surrounding Character (or Brackets)"
             }
         ],
         "menus": {
