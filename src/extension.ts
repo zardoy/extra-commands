@@ -36,6 +36,12 @@ export const activate = async () => {
 
         console.log(extensionsDirs)
     })
+    registerExtensionCommand('openTerminalWithoutFocus', async () => {
+        await vscode.commands.executeCommand('workbench.action.togglePanel')
+        setTimeout(() => {
+            void vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
+        }, 150)
+    })
     // registerExtensionCommand('showExtensionosSizes', async () => {
     // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))
     // })
