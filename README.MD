@@ -66,7 +66,6 @@ export const parseSomething = () => {}
 ### `deleteAllLeftAfterIndent`
 
 I use it as fixed variant of `cmd+backspace` shortcut.
-> You may say it doesn't work properly with actual selections.
 
 ### `removeSurroundingCharacter`
 
