@@ -5,9 +5,8 @@
     "categories": [
         "Other"
     ],
+    "preview": true,
     "version": "0.0.0-dev",
-    "repository": "https://github.com/zardoy/extra-commands.git",
-    "author": "Vitaly Turovsky <vital2580@icloud.com>",
     "license": "MIT",
     "private": true,
     "icon": "./resources/icon.png",
