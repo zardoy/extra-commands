@@ -179,6 +179,19 @@ export const activate = async () => {
     })
 
     registerExtensionCommand('renameSymbolAndFile', renameSymbolAndFile)
+
+    registerExtensionCommand('fixedCmdBackspace', async () => {
+        const editor = vscode.window.activeTextEditor
+        if (!editor || editor.viewColumn === undefined) return
+        // TODO interesting how it works with [multi-]selection
+        await editor.edit(edit => {
+            for (const selection of editor.selections) {
+                const pos = selection.active
+                const lineStart = editor.document.lineAt(pos).firstNonWhitespaceCharacterIndex
+                edit.delete(new vscode.Range(pos.with(undefined, lineStart), pos))
+            }
+        })
+    })
 }
 
 // TODO support: portable, web?

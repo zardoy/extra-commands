@@ -46,6 +46,10 @@
             {
                 "command": "renameSymbolAndFile",
                 "title": "Rename Symbol and File"
+            },
+            {
+                "command": "fixedCmdBackspace",
+                "title": "fixedCmdBackspace"
             }
         ],
         "menus": {
