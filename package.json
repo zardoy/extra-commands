@@ -32,14 +32,6 @@
                 "title": "Go to Line..."
             },
             {
-                "command": "goToRelativePath",
-                "title": "Go to Relative Path..."
-            },
-            {
-                "command": "addImport",
-                "title": "Add TypeScript Import"
-            },
-            {
                 "command": "openTerminalWithoutFocus",
                 "title": "Open Terminal without Focus"
             },
@@ -48,8 +40,8 @@
                 "title": "Rename Symbol and File"
             },
             {
-                "command": "fixedCmdBackspace",
-                "title": "fixedCmdBackspace"
+                "command": "deleteAllLeftAfterIndent",
+                "title": "Delete All Left After Indent"
             },
             {
                 "command": "removeSurroundingCharacter",
@@ -77,11 +69,9 @@
         "vscode-framework": "^0.0.18"
     },
     "dependencies": {
-        "ansi-escapes": "^5.0.0",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.5.0",
-        "untildify": "^4.0.0",
-        "vscode-uri": "^3.0.2"
+        "untildify": "^4.0.0"
     }
 }
