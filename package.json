@@ -1,5 +1,6 @@
 {
     "name": "extra-commands",
+    "description": "Contains commands, that should be builtin",
     "displayName": "Extra Commands",
     "publisher": "zardoy",
     "categories": [

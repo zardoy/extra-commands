@@ -1,6 +1,6 @@
 # Extra Commands
 
-Contains commands, that should be builtin!!
+Contains VSCode commands, that should be builtin!!
 
 Some commands are already builtin or already got covered by another extension? Create an issue! Once I find one of these commands, it **will be removed** from this extension! So, expect breaking changes.
 
