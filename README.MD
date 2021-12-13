@@ -20,7 +20,7 @@ However, for now, there is no even way to notify you about that!
 2. Shows helpful message if you exceeded number of lines
 3. When you jump to line, keep you screen in center
 
-### `openTerminalWithoutFocus`
+### `togglePanelVisibility`
 
 [microsoft/vscode#135429](https://github.com/microsoft/vscode/issues/135429)
 

@@ -2,7 +2,7 @@ import fs from 'fs'
 import { posix } from 'path'
 import untildify from 'untildify'
 import vscode from 'vscode'
-import { extensionCtx, registerExtensionCommand } from 'vscode-framework'
+import { extensionCtx, getExtensionCommandId, registerExtensionCommand } from 'vscode-framework'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 
 // TODO fight for releasing
@@ -36,11 +36,15 @@ export const activate = async () => {
 
         console.log(extensionsDirs)
     })
-    registerExtensionCommand('openTerminalWithoutFocus', async () => {
+    registerExtensionCommand('togglePanelVisibility', async () => {
         await vscode.commands.executeCommand('workbench.action.togglePanel')
         setTimeout(() => {
             void vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup')
         }, 150)
+    })
+    // preserved for compatibility
+    registerExtensionCommand('openTerminalWithoutFocus', async () => {
+        await vscode.commands.executeCommand(getExtensionCommandId('togglePanelVisibility'))
     })
     // registerExtensionCommand('showExtensionosSizes', async () => {
     // const size = await new Promise<number>(resolve => fastFolderSize(getExtensionsDir()))

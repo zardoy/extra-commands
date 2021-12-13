@@ -37,6 +37,10 @@
                 "title": "Open Terminal without Focus"
             },
             {
+                "command": "togglePanelVisibility",
+                "title": "Toggle Panel Visibility"
+            },
+            {
                 "command": "renameSymbolAndFile",
                 "title": "Rename Symbol and File"
             },
@@ -50,6 +54,12 @@
             }
         ],
         "menus": {
+            "commandPalette": [
+                {
+                    "command": "openTerminalWithoutFocus",
+                    "when": "false"
+                }
+            ],
             "extension/context": [
                 {
                     "command": "openExtensionFolder"
