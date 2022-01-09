@@ -2,7 +2,7 @@ import fs from 'fs'
 import { posix } from 'path'
 import untildify from 'untildify'
 import vscode from 'vscode'
-import { extensionCtx, getExtensionCommandId, registerExtensionCommand } from 'vscode-framework'
+import { extensionCtx, getExtensionCommandId, getExtensionSetting, registerExtensionCommand } from 'vscode-framework'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 
 // TODO fight for releasing
@@ -74,7 +74,18 @@ export const activate = async () => {
             const startPos = new vscode.Position(lineNumber - 1, line.firstNonWhitespaceCharacterIndex)
             activeTextEditor.selection = new vscode.Selection(startPos, startPos)
             // always in center. always in focus
-            activeTextEditor.revealRange(activeTextEditor.selection, vscode.TextEditorRevealType.InCenter)
+            const revealType: vscode.TextEditorRevealType = (() => {
+                switch (getExtensionSetting('goToLine.centerViewport')) {
+                    case 'always':
+                        return vscode.TextEditorRevealType.InCenter
+                    case 'ifOutOfView':
+                        return vscode.TextEditorRevealType.InCenterIfOutsideViewport
+
+                    default:
+                        return vscode.TextEditorRevealType.Default
+                }
+            })()
+            activeTextEditor.revealRange(activeTextEditor.selection, revealType)
             inputBox.hide()
         })
         inputBox.onDidHide(inputBox.dispose)

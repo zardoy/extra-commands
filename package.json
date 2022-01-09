@@ -65,6 +65,19 @@
                     "command": "openExtensionFolder"
                 }
             ]
+        },
+        "configuration": {
+            "properties": {
+                "goToLine.centerViewport": {
+                    "type": "string",
+                    "enum": [
+                        "disable",
+                        "ifOutOfView",
+                        "always"
+                    ],
+                    "default": "ifOutOfView"
+                }
+            }
         }
     },
     "scripts": {
