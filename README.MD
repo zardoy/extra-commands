@@ -18,7 +18,11 @@ However, for now, there is no even way to notify you about that!
 
 1. Doesn't jump between lines when you enter numbers
 2. Shows helpful message if you exceeded number of lines
-3. When you jump to line, keep you screen in center (can be enabled via setting)
+3. When you jump to line, keep you screen in center (can be enabled/changed via setting)
+
+### `openExtensionFolder`
+
+Right click on extension (from sidebar) -> *Open Extension Folder*.
 
 ### `togglePanelVisibility`
 
