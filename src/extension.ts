@@ -38,8 +38,8 @@ export const activate = async () => {
             return
         }
 
-        const extPath = `${untildify(getExtensionsDir())}/${extensionId}-${extension.packageJSON.version}`
-        await vscode.env.openExternal(vscode.Uri.file(extPath))
+        await vscode.env.openExternal(vscode.Uri.file(extension.extensionPath))
+        // const extPath = `${untildify(getExtensionsDir())}/${extensionId}-${extension.packageJSON.version}`
     })
     registerExtensionCommand('togglePanelVisibility', async () => {
         await vscode.commands.executeCommand('workbench.action.togglePanel')
