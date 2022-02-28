@@ -9,7 +9,7 @@ import renameSymbolAndFile from './commands/renameSymbolAndFile'
 const getExtensionsDir = () =>
     process.env.NODE_ENV === 'development'
         ? process.platform === 'win32'
-            ? '%USERPROFILE%\\.vscode\\extensions'
+            ? `${process.env.USERPROFILE!}\\.vscode\\extensions`
             : '~/.vscode/extensions'
         : posix.join(extensionCtx.extensionPath, '..')
 
