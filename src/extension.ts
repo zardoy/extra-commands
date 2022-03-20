@@ -1,9 +1,10 @@
 import fs from 'fs'
 import { posix } from 'path'
+import * as vscode from 'vscode'
 import untildify from 'untildify'
-import vscode from 'vscode'
-import { extensionCtx, getExtensionCommandId, getExtensionSetting, registerExtensionCommand } from 'vscode-framework'
+import { CommandHandler, extensionCtx, getExtensionCommandId, getExtensionSetting, registerExtensionCommand } from 'vscode-framework'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
+import { registerExtensionCommands } from './extensionCommands'
 
 // TODO fight for releasing
 const getExtensionsDir = () =>
@@ -14,6 +15,8 @@ const getExtensionsDir = () =>
         : posix.join(extensionCtx.extensionPath, '..')
 
 export const activate = async () => {
+    registerExtensionCommands()
+
     vscode.workspace.registerTextDocumentContentProvider('extra-commands', {
         async provideTextDocumentContent(uri) {
             // TODO support windows
@@ -31,16 +34,7 @@ export const activate = async () => {
             preview: false,
         })
     })
-    registerExtensionCommand('openExtensionFolder', async (_, extensionId: string) => {
-        const extension = vscode.extensions.getExtension(extensionId)
-        if (!extension) {
-            void vscode.window.showWarningMessage(`No acitve extension ${extensionId} found`)
-            return
-        }
 
-        await vscode.env.openExternal(vscode.Uri.file(extension.extensionPath))
-        // const extPath = `${untildify(getExtensionsDir())}/${extensionId}-${extension.packageJSON.version}`
-    })
     registerExtensionCommand('togglePanelVisibility', async () => {
         await vscode.commands.executeCommand('workbench.action.togglePanel')
         setTimeout(() => {
@@ -58,7 +52,7 @@ export const activate = async () => {
         const { activeTextEditor } = vscode.window
         if (!activeTextEditor) return
         const inputBox = vscode.window.createInputBox()
-        inputBox.title = 'Go to Line.'
+        inputBox.title = 'Go to Line'
         // inputBox.placeholder = '+ / - are relative to the current line'
         inputBox.onDidChangeValue(str => {
             inputBox.validationMessage = ''

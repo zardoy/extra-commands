@@ -51,16 +51,38 @@
             {
                 "command": "removeSurroundingCharacter",
                 "title": "Remove Surrounding Character (or Brackets)"
+            },
+            {
+                "command": "copyExtensionLink",
+                "title": "Copy Extension Link"
+            },
+            {
+                "command": "copyExtensionMarkdown",
+                "title": "Copy Extension Markdown"
             }
         ],
         "menus": {
             "commandPalette": [
                 {
-                    "command": "openTerminalWithoutFocus",
+                    "command": "openExtensionFolder",
+                    "when": "false"
+                },
+                {
+                    "command": "copyExtensionLink",
+                    "when": "false"
+                },
+                {
+                    "command": "copyExtensionMarkdown",
                     "when": "false"
                 }
             ],
             "extension/context": [
+                {
+                    "command": "copyExtensionLink"
+                },
+                {
+                    "command": "copyExtensionMarkdown"
+                },
                 {
                     "command": "openExtensionFolder"
                 }
@@ -85,17 +107,17 @@
     },
     "devDependencies": {
         "@types/node": "^16.10.3",
-        "@types/vscode": "^1.61.0",
-        "@zardoy/tsconfig": "^1.2.2",
+        "@types/vscode": "^1.65.0",
+        "@zardoy/tsconfig": "^1.4.0",
         "eslint": "^7",
-        "eslint-plugin-zardoy-config": "^0.1.0",
-        "typescript": "^4.4.3",
-        "vscode-framework": "^0.0.18"
+        "eslint-config-zardoy": "^0.2.10",
+        "typescript": "^4.6.2"
     },
     "dependencies": {
+        "vscode-framework": "^0.0.18",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
-        "fast-folder-size": "^1.5.0",
+        "fast-folder-size": "^1.6.1",
         "untildify": "^4.0.0"
     }
 }
