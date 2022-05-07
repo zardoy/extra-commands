@@ -1,10 +1,12 @@
 import fs from 'fs'
-import { posix } from 'path'
+import path from 'path'
 import * as vscode from 'vscode'
 import untildify from 'untildify'
 import { CommandHandler, extensionCtx, getExtensionCommandId, getExtensionSetting, registerExtensionCommand } from 'vscode-framework'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import { registerExtensionCommands } from './extensionCommands'
+
+const { posix } = path
 
 // TODO fight for releasing
 const getExtensionsDir = () =>
