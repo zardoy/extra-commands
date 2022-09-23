@@ -1,6 +1,6 @@
 // TODO introduce general rename command with decorations!
-import path from 'path'
 import vscode from 'vscode'
+import path from 'path-browserify'
 
 export default async () => {
     const editor = vscode.window.activeTextEditor
@@ -31,9 +31,8 @@ export default async () => {
     const newFileName = `${newName}${path.extname(uri.path)}`
     renameFileEdit.renameFile(editor.document.uri, vscode.Uri.joinPath(editor.document.uri, '../', newFileName))
     // TODO make it possible to easily undo changes. To make it possible, execute rename provider twice or even better: patch uris
-    console.log()
     if (renameSymbolEdit)
-        // eslint-disable-next-line zardoy-config/@typescript-eslint/dot-notation
+        // eslint-disable-next-line @typescript-eslint/dot-notation
         renameFileEdit['_edits'].unshift(...renameSymbolEdit['_edits'])
 
     await vscode.workspace.applyEdit(renameFileEdit)

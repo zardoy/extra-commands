@@ -10,7 +10,7 @@ specifiers:
   '@types/node': ^16.10.3
   '@types/vscode': ^1.65.0
   '@zardoy/tsconfig': ^1.4.0
-  '@zardoy/vscode-utils': ^0.0.37
+  '@zardoy/vscode-utils': ^0.0.38
   cross-env: ^7.0.3
   escape-string-regexp: ^5.0.0
   eslint: ^7
@@ -23,7 +23,7 @@ specifiers:
 
 dependencies:
   '@milahu/patch-package': 6.4.11
-  '@zardoy/vscode-utils': 0.0.37_62wr6wzsquwzoon3ch76oxy76q
+  '@zardoy/vscode-utils': 0.0.38_62wr6wzsquwzoon3ch76oxy76q
   cross-env: 7.0.3
   escape-string-regexp: 5.0.0
   fast-folder-size: 1.6.1
@@ -711,8 +711,8 @@ packages:
       type-fest: 2.19.0
     dev: false
 
-  /@zardoy/vscode-utils/0.0.37_62wr6wzsquwzoon3ch76oxy76q:
-    resolution: {integrity: sha512-uI6r+wg7GUQvkO1tOa8EM2J49QG58Ak9Gu7nIXn+Dx6sHXu1mGfJgEFn/qghBj0Ya4pDCy6KDHGgbb9DMKgaDw==}
+  /@zardoy/vscode-utils/0.0.38_62wr6wzsquwzoon3ch76oxy76q:
+    resolution: {integrity: sha512-nlw4hoRkrRwHJbLR0FtrztN1P92E9coZfLSv7NNyPPmDNmnyxAUXblDZsY5OSUVkxCsMBHNxSEHZuhcddOj17A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     hasBin: true
     peerDependencies:
