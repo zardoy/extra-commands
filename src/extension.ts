@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
-import filteredGoToSymbol from './commands/filteredGoToSymbol'
+import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import { registerExtensionCommands } from './extensionCommands'
 
