@@ -60,6 +60,14 @@
             {
                 "command": "copyExtensionMarkdown",
                 "title": "Copy Extension Markdown"
+            },
+            {
+                "command": "showFilteredSymbols",
+                "title": "Filtered Go to Symbol in Workspace..."
+            },
+            {
+                "command": "searchForSymbolWithinFolder",
+                "title": "Search for Symbol Within Folder..."
             }
         ],
         "menus": {
@@ -75,6 +83,10 @@
                 {
                     "command": "copyExtensionMarkdown",
                     "when": "false"
+                },
+                {
+                    "command": "searchForSymbolWithinFolder",
+                    "when": "false"
                 }
             ],
             "extension/context": [
@@ -86,6 +98,12 @@
                 },
                 {
                     "command": "openExtensionFolder"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "searchForSymbolWithinFolder",
+                    "when": "explorerResourceIsFolder"
                 }
             ]
         },
@@ -125,10 +143,11 @@
     },
     "dependencies": {
         "@milahu/patch-package": "^6.4.11",
-        "@zardoy/vscode-utils": "^0.0.7",
+        "@zardoy/vscode-utils": "^0.0.36",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.6.1",
+        "path-browserify": "^1.0.1",
         "untildify": "^4.0.0",
         "vscode-framework": "^0.0.18"
     }

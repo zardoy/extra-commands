@@ -1,20 +1,8 @@
-import fs from 'fs'
-import path from 'path'
 import * as vscode from 'vscode'
-import untildify from 'untildify'
-import { CommandHandler, extensionCtx, getExtensionCommandId, getExtensionSetting, registerExtensionCommand } from 'vscode-framework'
+import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
+import filteredGoToSymbol from './commands/filteredGoToSymbol'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import { registerExtensionCommands } from './extensionCommands'
-
-const { posix } = path
-
-// TODO fight for releasing
-const getExtensionsDir = () =>
-    process.env.NODE_ENV === 'development'
-        ? process.platform === 'win32'
-            ? `${process.env.USERPROFILE!}\\.vscode\\extensions`
-            : '~/.vscode/extensions'
-        : posix.join(extensionCtx.extensionPath, '..')
 
 export const activate = async () => {
     registerExtensionCommands()
@@ -121,15 +109,16 @@ export const activate = async () => {
                     edit.delete(new vscode.Range(pos.translate(0, delta), pos))
         })
     })
+
+    filteredGoToSymbol()
 }
 
 // TODO support: portable, web? (WONTFIX for now)
 // TODO support other platforms at least. the path was hardcoded to easy testing in dev
 const getPlatformKeybindings = async (platform: 'mac' | 'windows' | 'linux'): Promise<string> => {
-    const rawContent = await fs.promises.readFile(
-        posix.join(process.env.HOME!, 'Library/Application Support/Code/User/sync/keybindings/lastSynckeybindings.json'),
-        'utf-8',
+    const rawContent = await vscode.workspace.fs.readFile(
+        vscode.Uri.joinPath(vscode.Uri.file(process.env.HOME!), 'Library/Application Support/Code/User/sync/keybindings/lastSynckeybindings.json'),
     )
 
-    return JSON.parse(JSON.parse(JSON.parse(rawContent).content).content)[platform]
+    return JSON.parse(JSON.parse(JSON.parse(new TextDecoder().decode(rawContent)).content).content)[platform]
 }
