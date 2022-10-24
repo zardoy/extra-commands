@@ -20,6 +20,7 @@ specifiers:
   typescript: ^4.6.2
   untildify: ^4.0.0
   vscode-framework: ^0.0.18
+  vscode-uri: ^3.0.6
 
 dependencies:
   '@milahu/patch-package': 6.4.11
@@ -30,6 +31,7 @@ dependencies:
   path-browserify: 1.0.1
   untildify: 4.0.0
   vscode-framework: 0.0.18_sidx4bshlgomlvw5dohjzwrkau
+  vscode-uri: 3.0.6
 
 devDependencies:
   '@esbuild-plugins/node-modules-polyfill': 0.1.4
@@ -682,7 +684,7 @@ packages:
       koa-static: 5.0.0
       minimist: 1.2.5
       playwright: 1.14.1
-      vscode-uri: 3.0.2
+      vscode-uri: 3.0.6
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4613,10 +4615,6 @@ packages:
       json-schema-typed: 7.0.3
       lodash: 4.17.21
       type-fest: 2.3.4
-    dev: false
-
-  /vscode-uri/3.0.2:
-    resolution: {integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==}
     dev: false
 
   /vscode-uri/3.0.6:

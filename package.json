@@ -68,6 +68,14 @@
             {
                 "command": "searchForSymbolWithinFolder",
                 "title": "Search for Symbol Within Folder..."
+            },
+            {
+                "command": "revealCurrentWorkspaceFolder",
+                "title": "Reveal Current Workspace Folder"
+            },
+            {
+                "command": "renameCurrentWorkspaceFolder",
+                "title": "Rename Current Workspace Folder"
             }
         ],
         "menus": {
@@ -149,6 +157,16 @@
         "fast-folder-size": "^1.6.1",
         "path-browserify": "^1.0.1",
         "untildify": "^4.0.0",
-        "vscode-framework": "^0.0.18"
+        "vscode-framework": "^0.0.18",
+        "vscode-uri": "^3.0.6"
+    },
+    "prettier": {
+        "semi": false,
+        "singleQuote": true,
+        "proseWrap": "never",
+        "tabWidth": 4,
+        "trailingComma": "all",
+        "arrowParens": "avoid",
+        "printWidth": 160
     }
 }
