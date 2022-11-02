@@ -76,6 +76,10 @@
             {
                 "command": "renameCurrentWorkspaceFolder",
                 "title": "Rename Current Workspace Folder"
+            },
+            {
+                "command": "seedSearchField",
+                "title": "Seed Search Field"
             }
         ],
         "menus": {
@@ -125,6 +129,50 @@
                         "always"
                     ],
                     "default": "ifOutOfView"
+                },
+                "seedSearchField": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "query": {
+                                "type": "string"
+                            },
+                            "filesToInclude": {
+                                "type": "string"
+                            },
+                            "filesToExclude": {
+                                "type": "string"
+                            },
+                            "replace": {
+                                "type": "string"
+                            },
+                            "preserveCase": {
+                                "type": "boolean"
+                            },
+                            "triggerSearch": {
+                                "type": "boolean"
+                            },
+                            "isRegex": {
+                                "type": "boolean"
+                            },
+                            "isCaseSensitive": {
+                                "type": "boolean"
+                            },
+                            "matchWholeWord": {
+                                "type": "boolean"
+                            },
+                            "useExcludeSettingsAndIgnoreFiles": {
+                                "type": "boolean"
+                            },
+                            "onlyOpenEditors": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
                 }
             }
         }

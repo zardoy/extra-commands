@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
 import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
+import seedSearchField from './commands/seedSearchField'
 import { initUriCommands } from './commands/uri'
 import { registerExtensionCommands } from './extensionCommands'
 
@@ -114,6 +115,7 @@ export const activate = async () => {
     filteredGoToSymbol()
 
     initUriCommands()
+    seedSearchField()
 }
 
 // TODO support: portable, web? (WONTFIX for now)
