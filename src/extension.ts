@@ -5,6 +5,7 @@ import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import seedSearchField from './commands/seedSearchField'
 import { initUriCommands } from './commands/uri'
 import { registerExtensionCommands } from './extensionCommands'
+import textCommands from './textCommands'
 
 export const activate = async () => {
     registerExtensionCommands()
@@ -85,33 +86,7 @@ export const activate = async () => {
 
     registerExtensionCommand('renameSymbolAndFile', renameSymbolAndFile)
 
-    registerExtensionCommand('deleteAllLeftAfterIndent', async () => {
-        const editor = vscode.window.activeTextEditor
-        if (!editor || editor.viewColumn === undefined) return
-        // TODO interesting how it works with [multi-]selection
-        await editor.edit(edit => {
-            for (const selection of editor.selections) {
-                const pos = selection.end
-                const lineStart = editor.document.lineAt(pos).firstNonWhitespaceCharacterIndex
-                edit.delete(new vscode.Range(pos.with(undefined, lineStart), pos))
-            }
-        })
-    })
-
-    registerExtensionCommand('removeSurroundingCharacter', async () => {
-        // TODO create something like also for withing selection (this works with outer sel)
-        const editor = vscode.window.activeTextEditor
-        if (!editor || editor.viewColumn === undefined) return
-        await editor.edit(edit => {
-            for (const selection of editor.selections)
-                for (const [pos, delta] of [
-                    [selection.start, -1],
-                    [selection.end, 1],
-                ] as Array<[vscode.Position, number]>)
-                    edit.delete(new vscode.Range(pos.translate(0, delta), pos))
-        })
-    })
-
+    textCommands()
     filteredGoToSymbol()
 
     initUriCommands()

@@ -80,6 +80,10 @@
             {
                 "command": "seedSearchField",
                 "title": "Seed Search Field"
+            },
+            {
+                "command": "pasteReplaceLineContents",
+                "title": "Paste Replace Line Contents"
             }
         ],
         "menus": {
