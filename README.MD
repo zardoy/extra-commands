@@ -67,6 +67,8 @@ export const parseSomething = () => {}
 > `typescript.updateImportsOnFileMove.enabled` recommended to be `always`
 > Be aware, ctrl+z most probably won't work correctly
 
+## Text Commands
+
 ### `deleteAllLeftAfterIndent`
 
 I use it as fixed variant of `cmd+backspace` shortcut.
@@ -81,5 +83,3 @@ const obj = {
 ```
 
 Select **everything** inside brackets, and run this command to remove surrounding symbols of the selection. Then you can quickly type `[` to turn it into array.
-
-Other `extension*` commands are not implemented yet.
