@@ -84,6 +84,10 @@
             {
                 "command": "pasteReplaceLineContents",
                 "title": "Paste Replace Line Contents"
+            },
+            {
+                "command": "invertSelection",
+                "title": "Invert Selection"
             }
         ],
         "menus": {
