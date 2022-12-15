@@ -88,6 +88,18 @@
             {
                 "command": "invertSelection",
                 "title": "Invert Selection"
+            },
+            {
+                "command": "copyCurrentLineNumber",
+                "title": "Copy Current Line Number"
+            },
+            {
+                "command": "copyCurrentColumnNumber",
+                "title": "Copy Current Column Number"
+            },
+            {
+                "command": "copyCurrentLineColumnNumber",
+                "title": "Copy Current Line Column Number"
             }
         ],
         "menus": {

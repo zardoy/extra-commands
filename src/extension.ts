@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
+import copySimpleThings from './commands/copySimpleThings'
 import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import goToLine from './commands/goToLine'
 import invertSelection from './commands/invertSelection'
@@ -53,6 +54,7 @@ export const activate = async () => {
     initUriCommands()
     seedSearchField()
     invertSelection()
+    copySimpleThings()
 }
 
 // TODO support: portable, web? (WONTFIX for now)
