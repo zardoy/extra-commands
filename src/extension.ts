@@ -8,6 +8,7 @@ import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import seedSearchField from './commands/seedSearchField'
 import { initUriCommands } from './commands/uri'
 import { registerExtensionCommands } from './extensionCommands'
+import selectionCommands from './selectionCommands'
 import textCommands from './textCommands'
 
 export const activate = async () => {
@@ -55,6 +56,7 @@ export const activate = async () => {
     seedSearchField()
     invertSelection()
     copySimpleThings()
+    selectionCommands()
 }
 
 // TODO support: portable, web? (WONTFIX for now)
