@@ -108,6 +108,10 @@
             {
                 "command": "rotateActiveCursorInSelections",
                 "title": "Rotate (Swap) Active Cursor in Selections"
+            },
+            {
+                "command": "multiCursorPasteByLines",
+                "title": "Multi Cursor Paste by Lines"
             }
         ],
         "menus": {
