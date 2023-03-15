@@ -91,6 +91,30 @@
                 "title": "Invert Selection"
             },
             {
+                "command": "copyCurrentLineNumber",
+                "title": "Copy Current Line Number"
+            },
+            {
+                "command": "copyCurrentColumnNumber",
+                "title": "Copy Current Column Number"
+            },
+            {
+                "command": "copyCurrentLineColumnNumber",
+                "title": "Copy Current Line Column Number"
+            },
+            {
+                "command": "changeLeadingSelection",
+                "title": "Change Leading Selection"
+            },
+            {
+                "command": "rotateActiveCursorInSelections",
+                "title": "Rotate (Swap) Active Cursor in Selections"
+            },
+            {
+                "command": "multiCursorPasteByLines",
+                "title": "Multi Cursor Paste by Lines"
+            },
+            {
                 "command": "managePlatformKeybindings",
                 "title": "Manage Platform Keybindings"
             }
@@ -218,7 +242,7 @@
     },
     "dependencies": {
         "@milahu/patch-package": "^6.4.11",
-        "@zardoy/vscode-utils": "^0.0.38",
+        "@zardoy/vscode-utils": "^0.0.47",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.6.1",

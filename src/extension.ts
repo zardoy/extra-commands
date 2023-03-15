@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
+import copySimpleThings from './commands/copySimpleThings'
 import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import goToLine from './commands/goToLine'
 import invertSelection from './commands/invertSelection'
@@ -8,6 +9,7 @@ import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import seedSearchField from './commands/seedSearchField'
 import { initUriCommands } from './commands/uri'
 import { registerExtensionCommands } from './extensionCommands'
+import selectionCommands from './selectionCommands'
 import textCommands from './textCommands'
 
 export const activate = async () => {
@@ -54,6 +56,8 @@ export const activate = async () => {
     initUriCommands()
     seedSearchField()
     invertSelection()
+    copySimpleThings()
+    selectionCommands()
     platformKeybindings()
 }
 
