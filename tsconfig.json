@@ -4,6 +4,10 @@
         "lib": [
             "ESNext",
             "WebWorker"
+        ],
+        "types": [
+            "@zardoy/tsconfig",
+            "node"
         ]
     },
     "include": [

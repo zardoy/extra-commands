@@ -10,6 +10,7 @@ specifiers:
   '@types/node': ^16.10.3
   '@types/vscode': ^1.65.0
   '@zardoy/tsconfig': ^1.4.0
+  '@zardoy/utils': ^0.0.11
   '@zardoy/vscode-utils': ^0.0.47
   cross-env: ^7.0.3
   escape-string-regexp: ^5.0.0
@@ -25,6 +26,7 @@ specifiers:
 
 dependencies:
   '@milahu/patch-package': 6.4.11
+  '@zardoy/utils': 0.0.11
   '@zardoy/vscode-utils': 0.0.47_puva2murd67tawh35vfeohb324
   cross-env: 7.0.3
   escape-string-regexp: 5.0.0
@@ -705,6 +707,16 @@ packages:
     dependencies:
       typescript: 4.6.2
     dev: true
+
+  /@zardoy/utils/0.0.11:
+    resolution: {integrity: sha512-d6xBnSFCOa98HcL52xSBflJKjKpxfRhtr1eVexy89YujeCHSQhUMmSz9h07xyrulfW60k9tSeYH5reuqoh4l4w==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      escape-string-regexp: 4.0.0
+      lodash.compact: 3.0.1
+      rambda: 6.9.0
+      type-fest: 2.19.0
+    dev: false
 
   /@zardoy/utils/0.0.4:
     resolution: {integrity: sha512-XByd7HzxgwJi85o3oTSJDhk6b3H4w21NYHIqX3WtQ+tGBFPLldo8rdzr31oms6coeXvPVwRmoTGkJmAyHTJQRw==}
