@@ -8,7 +8,7 @@ const SCHEME = 'extraCommands.keybindings'
 // universal keybinding usually has two source keybinding with the same id:
 // the first one for win and second for mac
 type UniversalKeybindingId = number
-type KeybindingOutput = Partial<Record<'key' | 'command' | 'when' | 'win' | 'mac', string>> & { universal?: UniversalKeybindingId }
+type KeybindingOutput = Partial<Record<'key' | 'command' | 'when' | 'win' | 'mac' | 'linux', string>> & { universal?: UniversalKeybindingId }
 
 const _initialCategories = {
     universal: null,
@@ -31,6 +31,7 @@ const universalPlatformKey = Object.keys(platformWhenContextMap)
 
 const getCategoriesWithEmptyArrays = () => Object.fromEntries(Object.keys(_initialCategories).map(key => [key, [] as any[]]))
 
+/** They are available only in universal */
 const specialModifiers = {
     ctrlCmd: {
         mac: 'cmd',
@@ -231,9 +232,21 @@ export default () => {
                 return addWhenContext + (when ? ` && ${when}` : '')
             }
 
+            parsed.other = parsed.other.filter(bind => {
+                const { key, win, mac, linux } = bind
+                // todo use specialModifiers
+                if (win || mac || linux || key?.includes('ctrlCmd')) {
+                    parsed.universal.push(bind)
+                    return false
+                }
+
+                return true
+            })
+
             // TODO:
             // 1. basic + (not sure: advanced) linting
             // 2. when completions
+            // 3. command: pull from extensions
             for (const [index, bind] of parsed.universal.entries()) {
                 if (bind.key) {
                     const getKeyPartWithSep = (part: string) => {
@@ -283,7 +296,7 @@ export default () => {
                         when: addWhen(bind.when, keyToReplace),
                     })
 
-            allBinds.push(...parsed.removed, ...parsed.other)
+            allBinds.push(...parsed.other, ...parsed.removed)
 
             const tabSize = vscode.workspace.getConfiguration('', null).get<number>('editor.tabSize')
             await vscode.workspace.fs.writeFile(keybindingsFile, new TextEncoder().encode(JSON.stringify(allBinds, undefined, tabSize)))
