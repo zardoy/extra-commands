@@ -13,7 +13,8 @@
     "private": true,
     "icon": "resources/icon.png",
     "activationEvents": [
-        "onCommands"
+        "onCommands",
+        "onFileSystem:extraCommands.keybindings"
     ],
     "contributes": {
         "commands": [
@@ -112,6 +113,10 @@
             {
                 "command": "multiCursorPasteByLines",
                 "title": "Multi Cursor Paste by Lines"
+            },
+            {
+                "command": "managePlatformKeybindings",
+                "title": "Manage Platform Keybindings (preview)"
             }
         ],
         "menus": {
@@ -207,7 +212,13 @@
                     }
                 }
             }
-        }
+        },
+        "jsonValidation": [
+            {
+                "fileMatch": "extraCommands.keybindings:/**/*.json",
+                "url": "extraCommands.keybindings://t/schema.json"
+            }
+        ]
     },
     "scripts": {
         "start": "vscode-framework start",
@@ -231,10 +242,12 @@
     },
     "dependencies": {
         "@milahu/patch-package": "^6.4.11",
+        "@zardoy/utils": "^0.0.11",
         "@zardoy/vscode-utils": "^0.0.47",
         "cross-env": "^7.0.3",
         "escape-string-regexp": "^5.0.0",
         "fast-folder-size": "^1.6.1",
+        "jsonc-parser": "^3.2.0",
         "path-browserify": "^1.0.1",
         "untildify": "^4.0.0",
         "vscode-framework": "^0.0.18",

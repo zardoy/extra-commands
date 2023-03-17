@@ -4,6 +4,7 @@ import copySimpleThings from './commands/copySimpleThings'
 import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import goToLine from './commands/goToLine'
 import invertSelection from './commands/invertSelection'
+import platformKeybindings from './platformKeybindings'
 import renameSymbolAndFile from './commands/renameSymbolAndFile'
 import seedSearchField from './commands/seedSearchField'
 import { initUriCommands } from './commands/uri'
@@ -57,6 +58,7 @@ export const activate = async () => {
     invertSelection()
     copySimpleThings()
     selectionCommands()
+    platformKeybindings()
 }
 
 // TODO support: portable, web? (WONTFIX for now)
