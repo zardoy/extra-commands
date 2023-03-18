@@ -1,7 +1,8 @@
 import * as vscode from 'vscode'
 import { extensionCtx, registerExtensionCommand } from 'vscode-framework'
-import { getNodeValue, parse, parseTree } from 'jsonc-parser'
+import { getLocation, getNodeValue, parse, parseTree } from 'jsonc-parser'
 import { compact, pickObj } from '@zardoy/utils'
+import { getJsonCompletingInfo, jsonValuesToCompletions } from '@zardoy/vscode-utils/build/jsonCompletions'
 
 const SCHEME = 'extraCommands.keybindings'
 
@@ -36,6 +37,15 @@ const specialModifiers = {
     ctrlCmd: {
         mac: 'cmd',
         win: 'ctrl',
+    },
+}
+
+const platformKeyToSpecialModifier = {
+    mac: {
+        cmd: 'ctrlCmd',
+    },
+    win: {
+        ctrl: 'ctrlCmd',
     },
 }
 
@@ -162,22 +172,30 @@ export default () => {
                 const originalKeybinding = prev.find(({ universal }) => universal === current.universal)
                 const platformMatch = getPlatformFromContext(current.when)
                 if (platformMatch) {
-                    const { key, newWhen } = platformMatch
+                    const { key: platformMatchKey, newWhen } = platformMatch
                     current.when = newWhen
-                    const objectWithPlatformKey = { [key]: current.key }
-
-                    // TODO HACK useSpecialModifiers here
-                    // eslint-disable-next-line @typescript-eslint/dot-notation
-                    if (originalKeybinding?.['win']?.startsWith('ctrl') && current.key?.startsWith('cmd')) {
-                        originalKeybinding.key = `ctrlCmd${current.key.slice('cmd'.length)}`
-                        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, @typescript-eslint/dot-notation
-                        delete originalKeybinding['win']
-                        return prev
-                    }
+                    const objectWithPlatformKey = { [platformMatchKey]: current.key }
 
                     delete current.key
 
                     Object.assign(originalKeybinding ?? current, objectWithPlatformKey)
+
+                    if (originalKeybinding && !originalKeybinding.key) {
+                        const mappedWithoutSpecial: Record<string, string> = {}
+                        for (const platform of universalPlatformKey) {
+                            if (!originalKeybinding[platform]) continue
+                            mappedWithoutSpecial[platform] = KeybindignsParts.mapParts(
+                                originalKeybinding[platform],
+                                part => platformKeyToSpecialModifier[platform]?.[part] ?? part,
+                            )
+                        }
+
+                        const keyValues = Object.values(mappedWithoutSpecial)
+                        if (arrayAllEqual(keyValues)) {
+                            originalKeybinding.key = keyValues[0]!
+                            for (const platform of universalPlatformKey) originalKeybinding[platform] = undefined
+                        }
+                    }
                 }
 
                 if (!originalKeybinding) prev.push(current)
@@ -234,8 +252,7 @@ export default () => {
 
             parsed.other = parsed.other.filter(bind => {
                 const { key, win, mac, linux } = bind
-                // todo use specialModifiers
-                if (win || mac || linux || key?.includes('ctrlCmd')) {
+                if (win || mac || linux || (key && KeybindignsParts.hasSpecialModifier(key))) {
                     parsed.universal.push(bind)
                     return false
                 }
@@ -248,30 +265,12 @@ export default () => {
             // 2. when completions
             // 3. command: pull from extensions
             for (const [index, bind] of parsed.universal.entries()) {
-                if (bind.key) {
-                    const getKeyPartWithSep = (part: string) => {
-                        let sep = ''
-                        const clean = part.replace(/^[+ ]/, s => {
-                            sep = s
-                            return ''
-                        })
-                        return [sep, clean] as const
+                if (bind.key && KeybindignsParts.hasSpecialModifier(bind.key))
+                    for (const platform of universalPlatformKey) {
+                        const newKey = KeybindignsParts.mapParts(bind.key!, part => specialModifiers[part]?.[platform] ?? part)
+                        if (newKey === bind.key) continue
+                        bind[platform] = newKey
                     }
-
-                    const parts = bind.key.split(/(?=[+ ])/)
-                    if (parts.some(part => specialModifiers[part.replace(/^[+ ]/, '')]))
-                        for (const platform of universalPlatformKey) {
-                            const newKey = parts
-                                .map(partWithSep => {
-                                    const [sep, part] = getKeyPartWithSep(partWithSep)
-                                    return sep + ((specialModifiers[part]?.[platform] ?? part) as string)
-                                })
-                                .join('')
-                            // eslint-disable-next-line max-depth
-                            if (newKey === bind.key) continue
-                            bind[platform] = newKey
-                        }
-                }
 
                 const bindKeys = Object.keys(bind)
                 if (universalPlatformKey.every(platform => !(bindKeys as string[]).includes(platform)))
@@ -311,6 +310,90 @@ export default () => {
         if (editor?.document.uri.scheme === SCHEME) void vscode.languages.setTextDocumentLanguage(editor.document, 'jsonc')
     })
 
+    vscode.languages.registerCompletionItemProvider(
+        { scheme: SCHEME, language: '*' },
+        {
+            async provideCompletionItems(document, position, token, context) {
+                const location = getLocation(document.getText(), document.offsetAt(position))
+
+                const { insideStringRange } = getJsonCompletingInfo(location, document, position) || {}
+
+                if (!insideStringRange || !location.matches(['*', '*', 'when'])) return
+
+                const wordStart = document.getWordRangeAtPosition(position)?.start ?? position
+                const textBeforePos = document.lineAt(wordStart).text.slice(wordStart.character - 3)
+                if (['=', '!=', '~='].some(x => textBeforePos.startsWith(x))) return
+
+                type ContextKeyInfo = { key: string; type?: string; description?: string }
+                const when = await vscode.commands.executeCommand<ContextKeyInfo[]>('getContextKeyInfo')
+
+                return when.map(x => ({
+                    label: { label: x.key, description: x.type },
+                    filterText: `${x.key}${x.description ?? ''}`,
+                    detail: x.description,
+                }))
+            },
+        },
+    )
+
+    type CodeActionCommand = 'remove-duplicates'
+
+    registerExtensionCommand('_applyCodeAction' as any, (_, command: CodeActionCommand) => {})
+
+    vscode.languages.registerCodeActionsProvider(
+        {
+            scheme: SCHEME,
+        },
+        {
+            provideCodeActions(document, range, context, token) {
+                if (!context.only?.contains(vscode.CodeActionKind.Source)) return
+                return undefined
+                // return [
+                //     {
+                //         title: 'Remove duplicates',
+                //         command: '_applyCodeAction',
+                //         arguments: ['remove-duplicates' as CodeActionCommand],
+                //     },
+                // ]
+            },
+        },
+    )
+
     // todo vscode.commands.executeCommand('editor.action.defineKeybinding')
     // todo command: remove extension keybindings
+}
+
+const KeybindignsParts = {
+    getKeyPartWithSep(part: string) {
+        let sep = ''
+        const clean = part.replace(/^[+ ]/, s => {
+            sep = s
+            return ''
+        })
+        return [sep, clean] as const
+    },
+
+    mapParts(key: string, newPart: (old: string) => string) {
+        const parts = this.getParts(key)
+        return parts
+            .map(partWithSep => {
+                const [sep, part] = this.getKeyPartWithSep(partWithSep)
+                return sep + newPart(part)
+            })
+            .join('')
+    },
+
+    getParts(key: string) {
+        return key.split(/(?=[+ ])/)
+    },
+
+    hasSpecialModifier(key: string) {
+        return Object.keys(specialModifiers).some(mod => key.includes(mod))
+    },
+}
+
+const arrayAllEqual = (arr: any[]): boolean => {
+    const first = arr[0]
+    if (first === undefined) return false
+    return arr.every(x => x === first)
 }
