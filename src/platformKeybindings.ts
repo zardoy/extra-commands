@@ -272,10 +272,6 @@ export default () => {
                 return true
             })
 
-            // TODO:
-            // 1. basic + (not sure: advanced) linting
-            // 2. when completions
-            // 3. command: pull from extensions
             for (const [index, bind] of parsed.universal.entries()) {
                 if (bind.key && KeybindignsParts.hasSpecialModifier(bind.key))
                     for (const platform of universalPlatformKey) {
@@ -353,6 +349,7 @@ export default () => {
 
     type CodeActionCommand = 'remove-duplicates' | 'import-from-extension'
 
+    // todo-low need thinking of lint command (eg duplicates)
     // todo command for always deleting all keybinding commands
     registerExtensionCommand('_applyCodeAction' as any, async (_, command: CodeActionCommand) => {
         const editor = vscode.window.activeTextEditor!
