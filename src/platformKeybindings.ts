@@ -1,15 +1,16 @@
 import * as vscode from 'vscode'
-import { extensionCtx, registerExtensionCommand } from 'vscode-framework'
+import { extensionCtx, getExtensionCommandId, registerExtensionCommand } from 'vscode-framework'
 import { getLocation, getNodeValue, parse, parseTree } from 'jsonc-parser'
-import { compact, pickObj } from '@zardoy/utils'
-import { getJsonCompletingInfo, jsonValuesToCompletions } from '@zardoy/vscode-utils/build/jsonCompletions'
+import { omitObj, pickObj } from '@zardoy/utils'
+import { getJsonCompletingInfo } from '@zardoy/vscode-utils/build/jsonCompletions'
+import { showQuickPick } from '@zardoy/vscode-utils/build/quickPick'
 
 const SCHEME = 'extraCommands.keybindings'
 
 // universal keybinding usually has two source keybinding with the same id:
 // the first one for win and second for mac
 type UniversalKeybindingId = number
-type KeybindingOutput = Partial<Record<'key' | 'command' | 'when' | 'win' | 'mac' | 'linux', string>> & { universal?: UniversalKeybindingId }
+type KeybindingOutput = Partial<Record<'key' | 'command' | 'args' | 'when' | 'win' | 'mac' | 'linux', string>> & { universal?: UniversalKeybindingId }
 
 const _initialCategories = {
     universal: null,
@@ -48,6 +49,8 @@ const platformKeyToSpecialModifier = {
         ctrl: 'ctrlCmd',
     },
 }
+
+let saveIter = 0
 
 export default () => {
     const keybindingsFile =
@@ -122,7 +125,7 @@ export default () => {
 
             const categories = getCategoriesWithEmptyArrays()
 
-            type KeybindingSource = Partial<Record<'key' | 'command' | 'when', string>> & { universal?: UniversalKeybindingId }
+            type KeybindingSource = Partial<Record<'key' | 'command' | 'when' | 'args', string>> & { universal?: UniversalKeybindingId }
             let prevOffset = tree.offset + 1 //+1 for [
             for (const child of tree.children!) {
                 if (child.type !== 'object') continue
@@ -232,7 +235,7 @@ export default () => {
             throw new Error('Rename unsupported')
         },
         stat() {
-            return { ctime: 0, mtime: 0, size: 0, type: 0 }
+            return { ctime: 0, mtime: 0, size: saveIter, type: 0 }
         },
         watch() {
             return { dispose() {} }
@@ -249,6 +252,15 @@ export default () => {
                 const addWhenContext = platformWhenContextMap[platform]
                 return addWhenContext + (when ? ` && ${when}` : '')
             }
+
+            parsed.removed = parsed.removed.filter(bind => {
+                if (!bind.command?.startsWith('-')) {
+                    parsed.other.push(bind)
+                    return false
+                }
+
+                return true
+            })
 
             parsed.other = parsed.other.filter(bind => {
                 const { key, win, mac, linux } = bind
@@ -273,14 +285,14 @@ export default () => {
                     }
 
                 const bindKeys = Object.keys(bind)
-                if (universalPlatformKey.every(platform => !(bindKeys as string[]).includes(platform)))
+                if (universalPlatformKey.every(platform => !bindKeys.includes(platform)))
                     throw new Error(`Keybinding with index ${index} is going to be skipped, because of no platform-dep keys / modifiers.`)
 
                 for (const platform of universalPlatformKey) {
                     const platformKey = bind[platform]
                     if (!platformKey) continue
                     allBinds.push({
-                        ...pickObj(bind, 'command'),
+                        ...omitObj(bind, 'win', 'mac', 'linux', 'key'),
                         key: platformKey,
                         when: addWhen(bind.when, platform),
                         universal: index,
@@ -299,6 +311,7 @@ export default () => {
 
             const tabSize = vscode.workspace.getConfiguration('', null).get<number>('editor.tabSize')
             await vscode.workspace.fs.writeFile(keybindingsFile, new TextEncoder().encode(JSON.stringify(allBinds, undefined, tabSize)))
+            saveIter++
         },
     })
 
@@ -320,7 +333,8 @@ export default () => {
 
                 if (!insideStringRange || !location.matches(['*', '*', 'when'])) return
 
-                const wordStart = document.getWordRangeAtPosition(position)?.start ?? position
+                const wordRange = document.getWordRangeAtPosition(position, /[\w\d.-]+/)
+                const wordStart = wordRange?.start ?? position
                 const textBeforePos = document.lineAt(wordStart).text.slice(wordStart.character - 3)
                 if (['=', '!=', '~='].some(x => textBeforePos.startsWith(x))) return
 
@@ -331,30 +345,87 @@ export default () => {
                     label: { label: x.key, description: x.type },
                     filterText: `${x.key}${x.description ?? ''}`,
                     detail: x.description,
+                    range: wordRange,
                 }))
             },
         },
     )
 
-    type CodeActionCommand = 'remove-duplicates'
+    type CodeActionCommand = 'remove-duplicates' | 'import-from-extension'
 
-    registerExtensionCommand('_applyCodeAction' as any, (_, command: CodeActionCommand) => {})
+    // todo command for always deleting all keybinding commands
+    registerExtensionCommand('_applyCodeAction' as any, async (_, command: CodeActionCommand) => {
+        const editor = vscode.window.activeTextEditor!
+        // eslint-disable-next-line sonarjs/no-duplicate-string
+        if (command === 'import-from-extension') {
+            // todo filter already imported
+            // todo add keybinding to sync keybindings instead (or always invert)?
+            const keybindings: Array<[string, string, KeybindingOutput[]]> = vscode.extensions.all
+                .map(ext => ext.packageJSON.contributes?.keybindings && ([ext.id, ext.packageJSON.displayName, ext.packageJSON.contributes.keybindings] as any))
+                .filter(Boolean)
+            const selectedKeybindingsFromExtensions = await showQuickPick(
+                keybindings.map(([id, title, keybinding]) => ({
+                    label: title,
+                    description: id,
+                    detail: `${keybinding.length} keybindings to import`,
+                    value: keybinding,
+                })),
+                {
+                    title: 'Select extensions from which keybindings to import',
+                    matchOnDescription: true,
+                },
+            )
+            if (!selectedKeybindingsFromExtensions) return
+            const finalKeybindings = await showQuickPick(
+                selectedKeybindingsFromExtensions.flat().map(keybinding => ({
+                    label: `${keybinding.command!}${keybinding.args ? ` args: ${keybinding.args}` : ''}`,
+                    description: keybinding.when,
+                    detail: JSON.stringify(omitObj(keybinding, 'command', 'args', 'when')),
+                    value: keybinding,
+                })),
+                {
+                    canPickMany: true,
+                    initialAllSelected: true,
+                    matchOnDescription: true,
+                    matchOnDetail: true,
+                },
+            )
+            if (!finalKeybindings) return
+            const { document } = editor
+            const lastClosingBrace = document.positionAt(document.getText().lastIndexOf(']'))
+            const edit = new vscode.WorkspaceEdit()
+            edit.set(document.uri, [
+                {
+                    range: new vscode.Range(lastClosingBrace, lastClosingBrace),
+                    newText: `\n${JSON.stringify(finalKeybindings, undefined, editor.options.insertSpaces ? editor.options.tabSize : '\t').slice(1, -1)}`,
+                },
+            ])
+            await vscode.workspace.applyEdit(edit)
+        }
+    })
 
     vscode.languages.registerCodeActionsProvider(
         {
+            language: 'jsonc',
             scheme: SCHEME,
         },
         {
             provideCodeActions(document, range, context, token) {
                 if (!context.only?.contains(vscode.CodeActionKind.Source)) return
-                return undefined
-                // return [
-                //     {
-                //         title: 'Remove duplicates',
-                //         command: '_applyCodeAction',
-                //         arguments: ['remove-duplicates' as CodeActionCommand],
-                //     },
-                // ]
+                const codeActionCommand = (command: CodeActionCommand, title: string, id: string) => {
+                    const codeAction = new vscode.CodeAction(title, vscode.CodeActionKind.Source.append(id))
+                    codeAction.command = {
+                        title: '',
+                        command: getExtensionCommandId('_applyCodeAction' as any),
+                        arguments: [command],
+                    }
+                    return codeAction
+                }
+
+                return [
+                    // codeActionCommand('remove-duplicates', 'Remove possible duplicates', 'removeDuplicates')
+                    codeActionCommand('import-from-extension', 'Import keybindings from extension', 'import-from-extension'),
+                ]
             },
         },
     )
