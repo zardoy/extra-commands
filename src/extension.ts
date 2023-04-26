@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { getExtensionCommandId, getExtensionSetting, registerActiveDevelopmentCommand, registerExtensionCommand } from 'vscode-framework'
-import copySimpleThings from './commands/copySimpleThings'
+import copyLineColumn from './commands/copyLineColumn'
 import filteredGoToSymbol from './commands/extendedGoToSymbol'
 import goToLine from './commands/goToLine'
 import invertSelection from './commands/invertSelection'
@@ -11,8 +11,10 @@ import { initUriCommands } from './commands/uri'
 import { registerExtensionCommands } from './extensionCommands'
 import selectionCommands from './selectionCommands'
 import textCommands from './textCommands'
+import expandSelection from './commands/expandSelection'
 
 export const activate = async () => {
+    // commands for extensions view
     registerExtensionCommands()
 
     vscode.workspace.registerTextDocumentContentProvider('extra-commands', {
@@ -56,9 +58,10 @@ export const activate = async () => {
     initUriCommands()
     seedSearchField()
     invertSelection()
-    copySimpleThings()
+    copyLineColumn()
     selectionCommands()
     platformKeybindings()
+    expandSelection()
 }
 
 // TODO support: portable, web? (WONTFIX for now)

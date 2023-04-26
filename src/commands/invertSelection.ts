@@ -1,10 +1,8 @@
 import * as vscode from 'vscode'
-import { registerExtensionCommand } from 'vscode-framework'
+import { getExtensionCommandId } from 'vscode-framework'
 
 export default () => {
-    registerExtensionCommand('invertSelection', () => {
-        const editor = vscode.window.activeTextEditor
-        if (!editor) return
+    vscode.commands.registerTextEditorCommand(getExtensionCommandId('invertSelection'), editor => {
         const newSelections: vscode.Selection[] = []
         let prevPos = new vscode.Position(0, 0)
         const doSelectionAgainstPrevPos = (pos: vscode.Position) => {
