@@ -116,7 +116,7 @@
             },
             {
                 "command": "managePlatformKeybindings",
-                "title": "Manage Platform Keybindings (preview)"
+                "title": "Manage Platform Keybindings (beta)"
             }
         ],
         "menus": {

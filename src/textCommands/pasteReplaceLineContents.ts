@@ -4,8 +4,7 @@ import { getExtensionCommandId } from 'vscode-framework'
 
 export default () => {
     // reason: selectLineContents -> paste works, but it messes with your selection in undo stack, this one is super clean
-    commands.registerTextEditorCommand(getExtensionCommandId('pasteReplaceLineContents'), async (editor, _edit, options = {}) => {
-        const { trimEnd = true, content } = options
+    commands.registerTextEditorCommand(getExtensionCommandId('pasteReplaceLineContents'), async (editor, _edit, { trimEnd = true, content } = {}) => {
         let replaceContent = content ?? (await env.clipboard.readText())
         if (trimEnd) replaceContent = replaceContent.trimEnd()
         const { document, selections } = editor

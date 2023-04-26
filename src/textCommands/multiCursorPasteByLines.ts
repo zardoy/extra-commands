@@ -6,7 +6,7 @@ import { getExtensionCommandId } from 'vscode-framework'
 // BUT this command uses the same behavior but for any number of lines in clipboard
 
 export default () => {
-    commands.registerTextEditorCommand(getExtensionCommandId('multiCursorPasteByLines'), async (editor, _edit, options = {}) => {
+    commands.registerTextEditorCommand(getExtensionCommandId('multiCursorPasteByLines'), async (editor, _edit) => {
         const clibpardText = await env.clipboard.readText()
         const lines = clibpardText.split('\n')
         const { selections } = editor
