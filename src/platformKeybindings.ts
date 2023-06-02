@@ -81,9 +81,7 @@ export default () => {
                 const stringProp = {
                     type: 'string',
                 }
-                const commandEnumToPatch = originalSchema.items.properties.command.anyOf[0]
-                // remove annoying - suggestions
-                commandEnumToPatch.enum = commandEnumToPatch.enum.filter(c => !c.startsWith('-'))
+                originalSchema.items.properties.command = { anyOf: [{ $ref: '#/definitions/commandNames' }, { type: 'string' }] }
                 const schema = {
                     allowTrailingCommas: true,
                     allowComments: true,
@@ -305,8 +303,13 @@ export default () => {
 
             allBinds.push(...parsed.other, ...parsed.removed)
 
-            const tabSize = vscode.workspace.getConfiguration('', null).get<number>('editor.tabSize')
-            await vscode.workspace.fs.writeFile(keybindingsFile, new TextEncoder().encode(JSON.stringify(allBinds, undefined, tabSize)))
+            const configuration = vscode.workspace.getConfiguration('', null)
+            const tabSize = configuration.get<number>('editor.tabSize')
+            let stringified = JSON.stringify(allBinds, undefined, tabSize)
+            if (configuration.get('files.insertFinalNewline')) {
+                stringified += '\n'
+            }
+            await vscode.workspace.fs.writeFile(keybindingsFile, new TextEncoder().encode(stringified))
             saveIter++
         },
     })
