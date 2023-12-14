@@ -306,9 +306,8 @@ export default () => {
             const configuration = vscode.workspace.getConfiguration('', null)
             const tabSize = configuration.get<number>('editor.tabSize')
             let stringified = JSON.stringify(allBinds, undefined, tabSize)
-            if (configuration.get('files.insertFinalNewline')) {
-                stringified += '\n'
-            }
+            if (configuration.get('files.insertFinalNewline')) stringified += '\n'
+
             await vscode.workspace.fs.writeFile(keybindingsFile, new TextEncoder().encode(stringified))
             saveIter++
         },

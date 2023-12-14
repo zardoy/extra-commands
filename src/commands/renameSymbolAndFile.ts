@@ -15,25 +15,21 @@ export default async () => {
     const newName = await vscode.window.showInputBox({
         ignoreFocusOut: true,
         value: editor.document.getText(editor.document.getWordRangeAtPosition(startPos)),
+        title: 'Change file name and symbol name to',
         // valueSelection: startPos.compareTo(endPos) === 0 ? undefined : startPos.,
     })
     if (newName === undefined) return
-    const renameSymbolEdit: vscode.WorkspaceEdit | undefined = await vscode.commands.executeCommand(
+    let edit: vscode.WorkspaceEdit | undefined = await vscode.commands.executeCommand(
         'vscode.executeDocumentRenameProvider',
         editor.document.uri,
         startPos,
         newName,
     )
-    // Also rename file only. by this command now is even more powerful
-    const renameFileEdit = new vscode.WorkspaceEdit()
+    if (!edit) edit = new vscode.WorkspaceEdit()
 
     const { uri } = editor.document
     const newFileName = `${newName}${path.extname(uri.path)}`
-    renameFileEdit.renameFile(editor.document.uri, vscode.Uri.joinPath(editor.document.uri, '../', newFileName))
-    // TODO make it possible to easily undo changes. To make it possible, execute rename provider twice or even better: patch uris
-    if (renameSymbolEdit)
-        // eslint-disable-next-line @typescript-eslint/dot-notation
-        renameFileEdit['_edits'].unshift(...renameSymbolEdit['_edits'])
+    edit.renameFile(editor.document.uri, vscode.Uri.joinPath(editor.document.uri, '../', newFileName))
 
-    await vscode.workspace.applyEdit(renameFileEdit)
+    await vscode.workspace.applyEdit(edit)
 }
