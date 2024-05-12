@@ -67,6 +67,10 @@ export const parseSomething = () => {}
 > `typescript.updateImportsOnFileMove.enabled` recommended to be `always`
 > Be aware, ctrl+z most probably won't work correctly
 
+### `managePlatformKeybindings`
+
+Add keybindings like `ctrlCmd+shift+t` to `universal` group and these will be inserted into keybindings.json in normalized way (two different keybindings for different platforms).
+
 ## Text Commands
 
 ### `deleteAllLeftAfterIndent`

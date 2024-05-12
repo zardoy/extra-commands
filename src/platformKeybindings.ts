@@ -280,7 +280,9 @@ export default () => {
 
                 const bindKeys = Object.keys(bind)
                 if (universalPlatformKey.every(platform => !bindKeys.includes(platform)))
-                    throw new Error(`Keybinding with index ${index} is going to be skipped, because of no platform-dep keys / modifiers.`)
+                    throw new Error(
+                        `Keybinding with bind ${bind.key ?? '?'} (${bind.command ?? '?'}) is going to be skipped, because of no platform-dep keys / modifiers.`,
+                    )
 
                 for (const platform of universalPlatformKey) {
                     const platformKey = bind[platform]

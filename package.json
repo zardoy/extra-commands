@@ -116,7 +116,7 @@
             },
             {
                 "command": "managePlatformKeybindings",
-                "title": "Manage Platform Keybindings (beta)"
+                "title": "Manage Platform Keybindings"
             },
             {
                 "command": "expandSelection",
